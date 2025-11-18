@@ -236,18 +236,18 @@ class ExpoUnifiedPushModule : Module() {
   }
 
   private fun bindService() {
-    val context = appContext.activityProvider?.currentActivity
+    val context = appContext.reactContext ?: return
     if (distributorService == null) {
       Intent(context, ExpoUPService::class.java).also { intent ->
-        context?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        context.bindService(intent, connection, Context.BIND_AUTO_CREATE)
       }
     }
   }
 
   private fun unbindService() {
-    val context = appContext.activityProvider?.currentActivity
+    val context = appContext.reactContext ?: return
     if (distributorService != null) {
-      context?.unbindService(connection)
+      context.unbindService(connection)
     }
   }
 
