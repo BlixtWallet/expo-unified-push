@@ -24,7 +24,7 @@ const SERVER_VAPID_KEY = process.env.EXPO_PUBLIC_SERVER_VAPID_KEY;
 export default function App() {
   const [list, setList] = useState(ExpoUnifiedPush.getDistributors());
   const [selected, setSelected] = useState(
-    ExpoUnifiedPush.getSavedDistributor()
+    ExpoUnifiedPush.getSavedDistributor(),
   );
 
   useEffect(() => {
@@ -118,7 +118,7 @@ export default function App() {
   }
 
   const currentDistributor = list.find(
-    (distributor) => distributor.id === selected
+    (distributor) => distributor.id === selected,
   );
 
   return (

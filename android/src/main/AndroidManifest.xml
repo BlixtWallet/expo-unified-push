@@ -2,11 +2,18 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="dev.djara.expounifiedpush">
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+
   <application>
     <service android:name=".ExpoUPService" android:exported="false">
       <intent-filter>
         <action android:name="org.unifiedpush.android.connector.PUSH_EVENT" />
       </intent-filter>
     </service>
+
+    <service
+      android:name=".ExpoUPHeadlessService"
+      android:permission="android.permission.BIND_JOB_SERVICE"
+      android:exported="false" />
   </application>
 </manifest>

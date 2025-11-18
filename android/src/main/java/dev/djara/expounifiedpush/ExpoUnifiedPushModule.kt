@@ -39,7 +39,7 @@ class ExpoUnifiedPushModule : Module() {
     Name("ExpoUnifiedPush")
 
     // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    // Constants("TASK" to TASK)
+    Constants("headlessTaskName" to HEADLESS_TASK_NAME)
 
     // Defines event names that the module can send to JavaScript.
     Events("message")

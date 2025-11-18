@@ -1,8 +1,25 @@
-import { registerRootComponent } from 'expo';
+import { AppRegistry } from "react-native";
+import App from "./App";
+import { requireNativeModule } from "expo-modules-core";
 
-import App from './App';
+const ExpoUnifiedPush = requireNativeModule("ExpoUnifiedPush");
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
-registerRootComponent(App);
+AppRegistry.registerComponent("main", () => App);
+
+AppRegistry.registerHeadlessTask(
+  ExpoUnifiedPush.headlessTaskName,
+  () =>
+    async ({ action, data }: { action: string; data: Record<string, any> }) => {
+      if (action === "message") {
+        if (data?.decrypted && data?.message) {
+          try {
+            const payload = JSON.parse(data.message);
+            console.log("[Headless] Silent push", payload);
+          } catch (e) {
+            console.log("[Headless] Raw push", data.message);
+          }
+        }
+        // TODO: trigger background work here
+      }
+    },
+);

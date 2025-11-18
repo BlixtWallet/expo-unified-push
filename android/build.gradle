@@ -1,5 +1,5 @@
 plugins {
-  id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.0'
+  id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.25'
 }
 
 apply plugin: 'com.android.library'
@@ -50,4 +50,6 @@ dependencies {
   implementation('org.unifiedpush.android:connector:3.0.7')
   implementation('org.unifiedpush.android:embedded-fcm-distributor:3.0.0')
   implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+  def rnVersion = safeExtGet("reactNativeVersion", "0.74.1")
+  implementation "com.facebook.react:react-native:${rnVersion}"
 }

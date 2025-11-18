@@ -48,7 +48,24 @@ class ExpoUPService : PushService() {
         if (module != null) {
             module.sendEvent("message", payload)
         } else {
-            Log.e(TAG, "sendPushEvent called without a reference to the expo module")
+            Log.i(TAG, "sendPushEvent called with no module reference, invoking headless task for action=$action")
+            triggerHeadlessTask(payload)
+        }
+    }
+
+    private fun triggerHeadlessTask(payload: Bundle) {
+        val action = payload.getString("action") ?: return
+        val data = payload.getBundle("data")
+        val intent =
+            Intent(applicationContext, ExpoUPHeadlessService::class.java).apply {
+                putExtra(HEADLESS_KEY_ACTION, action)
+                putExtra(HEADLESS_KEY_DATA, data)
+            }
+
+        kotlin.runCatching {
+            ExpoUPHeadlessService.enqueueWork(applicationContext, intent)
+        }.onFailure { err ->
+            Log.e(TAG, "Unable to enqueue headless task", err)
         }
     }
 
@@ -126,8 +143,9 @@ class ExpoUPService : PushService() {
                 .setContentIntent(getOpenUrlIntent(url))
                 .setAutoCancel(true)
 
-        if (silent != null) {
-            notification.setSilent(silent)
+        if (silent == true) {
+            Log.d(TAG, "Skipping notification because payload requested silent delivery")
+            return
         }
 
         if (count != null) {
@@ -240,4 +258,5 @@ class ExpoUPService : PushService() {
         Log.d(TAG, "sending \"unregistered\" action with data: $data")
         sendPushEvent("unregistered", data)
     }
+
 }

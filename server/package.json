@@ -1,0 +1,14 @@
+{
+  "name": "expo-unified-push-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate-keys": "node generate-keys.js",
+    "send": "node send-notification.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "web-push": "^3.6.6"
+  }
+}
