@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArraySet
 internal const val HEADLESS_TASK_NAME = "ExpoUnifiedPushHeadlessTask"
 internal const val HEADLESS_KEY_ACTION = "headless_action"
 internal const val HEADLESS_KEY_DATA = "headless_data"
-private const val HEADLESS_JOB_ID = 2001
+private val nextJobId = java.util.concurrent.atomic.AtomicInteger(2000)
 
 class ExpoUPHeadlessService : JobIntentService(), HeadlessJsTaskEventListener {
   private val activeTasks = CopyOnWriteArraySet<Int>()
@@ -111,10 +111,11 @@ class ExpoUPHeadlessService : JobIntentService(), HeadlessJsTaskEventListener {
 
   companion object {
     fun enqueueWork(context: Context, work: Intent) {
+      val jobId = nextJobId.incrementAndGet()
       enqueueWork(
         context,
         ExpoUPHeadlessService::class.java,
-        HEADLESS_JOB_ID,
+        jobId,
         work
       )
     }
