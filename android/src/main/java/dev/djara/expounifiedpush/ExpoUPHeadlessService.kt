@@ -18,11 +18,11 @@ import com.facebook.react.jstasks.HeadlessJsTaskConfig
 import com.facebook.react.jstasks.HeadlessJsTaskContext
 import com.facebook.react.jstasks.HeadlessJsTaskEventListener
 import java.util.concurrent.CopyOnWriteArraySet
+import java.util.concurrent.atomic.AtomicInteger
 
 internal const val HEADLESS_TASK_NAME = "ExpoUnifiedPushHeadlessTask"
 internal const val HEADLESS_KEY_ACTION = "headless_action"
 internal const val HEADLESS_KEY_DATA = "headless_data"
-private val nextJobId = java.util.concurrent.atomic.AtomicInteger(2000)
 
 class ExpoUPHeadlessService : JobIntentService(), HeadlessJsTaskEventListener {
   private val activeTasks = CopyOnWriteArraySet<Int>()
@@ -110,12 +110,13 @@ class ExpoUPHeadlessService : JobIntentService(), HeadlessJsTaskEventListener {
     get() = (application as ReactApplication).reactNativeHost
 
   companion object {
+    private const val JOB_ID = 2001
+
     fun enqueueWork(context: Context, work: Intent) {
-      val jobId = nextJobId.incrementAndGet()
       enqueueWork(
         context,
         ExpoUPHeadlessService::class.java,
-        jobId,
+        JOB_ID,
         work
       )
     }

@@ -247,6 +247,7 @@ class ExpoUnifiedPushModule : Module() {
   private fun unbindService() {
     val context = appContext.reactContext ?: return
     if (distributorService != null) {
+      distributorService?.setModule(null)
       context.unbindService(connection)
     }
   }
@@ -263,6 +264,7 @@ class ExpoUnifiedPushModule : Module() {
     }
 
     override fun onServiceDisconnected(arg0: ComponentName) {
+      distributorService?.setModule(null)
       distributorService = null
     }
   }

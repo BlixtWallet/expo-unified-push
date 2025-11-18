@@ -2,28 +2,12 @@ import { AppRegistry, Platform } from "react-native";
 import { requireNativeModule } from "expo-modules-core";
 import App from "./App";
 
-const shimMicrotasks = () => {
-  if (Platform.OS !== "android") {
-    return;
-  }
-
-  const schedule = (fn: (...args: any[]) => void, ...args: any[]) =>
+if (Platform.OS === "android") {
+  global.queueMicrotask = (fn: () => void) => setTimeout(fn, 0);
+  global.setImmediate = (fn: (...args: any[]) => void, ...args: any[]) =>
     setTimeout(() => fn(...args), 0);
-
-  (globalThis as typeof global).queueMicrotask = schedule;
-  (globalThis as typeof global).setImmediate = (
-    fn: (...args: any[]) => void,
-    ...args: any[]
-  ) => {
-    const handle = schedule(fn, ...args);
-    return handle;
-  };
-  (globalThis as typeof global).clearImmediate = (handle: any) => {
-    clearTimeout(handle);
-  };
-};
-
-shimMicrotasks();
+  global.clearImmediate = (id: any) => clearTimeout(id);
+}
 const ExpoUnifiedPush = requireNativeModule("ExpoUnifiedPush");
 
 AppRegistry.registerComponent("main", () => App);

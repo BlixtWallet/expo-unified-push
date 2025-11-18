@@ -35,7 +35,7 @@ class ExpoUPService : PushService() {
     val TAG = "ExpoUPService"
     private var _module: Module? = null
 
-    fun setModule(m: Module) {
+    fun setModule(m: Module?) {
         _module = m
     }
 
